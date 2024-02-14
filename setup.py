@@ -1,7 +1,7 @@
 from setuptools import find_packages,setup
 
 from typing import List
-
+#setup.py is to install our source code 
 REQUIREMENT_FILE_NAME = "requirements.txt"
 HYPHEN_E_DOT = "-e ."  #install our source code as library(-e is editable or install)
 
