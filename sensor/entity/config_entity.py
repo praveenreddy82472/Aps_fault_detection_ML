@@ -8,7 +8,7 @@ TEST_FILE_NAME = "test.csv"
 
 class TrainingPipelineConfig:
     def __init__(self):
-        self.artifact_dir = os.path.join(os.getcwd(),"artifact",f"{datetime.now().strftime('%m%d%Y_%H%M%S')}")
+        self.artifact_dir = os.path.join(os.getcwd(),"artifact",f"{datetime.now().strftime('%m%d%Y__%H%M%S')}")
         
 class DataIngestionConfig:
     
@@ -40,6 +40,7 @@ class DataValidationConfig:
         self.data_validation_dir = os.path.join(training_pipeline_config.artifact_dir,"data_validation")
         self.report_file_path = os.path.join(self.data_validation_dir,"report.yaml")
         self.missing_threshold:float = 0.2
+        self.base_file_path = os.path.join("Airps_failure_training_set1.csv")
 class DataTransformationConfig:...
 class ModelTrainigConfig:...
 class ModelEvaluationConfig:...
