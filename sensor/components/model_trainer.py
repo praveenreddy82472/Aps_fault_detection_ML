@@ -38,8 +38,8 @@ class ModelTrainer:
     def initiate_model_trainer(self,)->artifact_entity.ModelTrainerArtifact:
         try:
             logging.info(f"Loading train and test array.")
-            train_arr= utils.load_numpy_array_data(file_path=self.data_transformation_artifact.transfrom_train_path)
-            test_arr = utils.load_numpy_array_data(file_path=self.data_transformation_artifact.transfrom_test_path)
+            train_arr= utils.load_numpy_array_data(file_path=self.data_transformation_artifact.transformed_train_path)
+            test_arr = utils.load_numpy_array_data(file_path=self.data_transformation_artifact.transformed_test_path)
             
             logging.info(f"Splitting input and target feature from both train and test arr.")
             x_train,y_train = train_arr[:,:-1],train_arr[:,-1]
