@@ -12,6 +12,9 @@ from imblearn.combine import SMOTETomek
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import RobustScaler
 from sensor.config import TARGET_COLUMN
+from imblearn.over_sampling import RandomOverSampler
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.pipeline import Pipeline
 
 
 
@@ -75,17 +78,31 @@ class DataTransformation:
             print("input_feature_test_arr:",input_feature_test_arr.dtype)
             print("target_feature_train_arr:", type(target_feature_train_arr))
             print("target_feature_test_arr:", type(target_feature_test_arr))
+            print(type(transformation_pipeline))
             
 
-            smt = SMOTETomek(sampling_strategy="minority",random_state=42)
+            #smt = SMOTETomek(sampling_strategy="minority")
+            resampling_pipeline = Pipeline([
+                ('over_sampler', RandomOverSampler(sampling_strategy='minority')),
+                ('under_sampler', RandomUnderSampler(sampling_strategy='majority'))
+            ])
             
             logging.info(f"Before resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_arr.shape}")
-            input_feature_train_arr, target_feature_train_arr = smt.fit_resample(input_feature_train_arr, str(target_feature_train_arr))
+            try:
+                input_feature_train_arr, target_feature_train_arr = resampling_pipeline.fit_resample(input_feature_train_arr, target_feature_train_arr)
+            except AttributeError as e:
+                # Log the error and handle the case where 'your_variable' is None
+                print(f"AttributeError: {e}")
+                if input_feature_train_arr is None and target_feature_train_arr is None:
+                    print("Warning: 'your_variable' is None.")
+                else:
+                    # Handle other cases where 'your_variable' does not have 'split' attribute
+                    print(f"Unexpected condition with 'your_variable': {input_feature_train_arr,target_feature_train_arr}")
             logging.info(f"After resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_arr.shape}")
             
             
             logging.info(f"Before resampling in testing set Input: {input_feature_test_arr.shape} Target:{target_feature_test_arr.shape}")
-            input_feature_test_arr, target_feature_test_arr = smt.fit_resample(input_feature_test_arr, target_feature_test_arr)
+            input_feature_test_arr, target_feature_test_arr = resampling_pipeline.fit_resample(input_feature_test_arr, target_feature_test_arr)
             logging.info(f"After resampling in testing set Input: {input_feature_test_arr.shape} Target:{target_feature_test_arr.shape}")
 
             #target encoder

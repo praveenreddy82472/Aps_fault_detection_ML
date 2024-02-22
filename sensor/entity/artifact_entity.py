@@ -13,8 +13,8 @@ class DataValidationArtifact:
 @dataclass
 class DataTransformationArtifact:
     transform_object_path:str
-    transfrom_train_path:str
-    transfrom_test_path:str
+    transfromed_train_path:str
+    transfromed_test_path:str
     target_encoder_path:str
     
 @dataclass
