@@ -43,37 +43,46 @@ class DataTransformation:
 
     def initiate_data_transformation(self,) -> artifact_entity.DataTransformationArtifact:
         try:
+           
             #reading training and testing file
             train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
             test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
             
+            
             #selecting input feature for train and test dataframe
-            input_feature_train_df=train_df.drop(TARGET_COLUMN,axis=1)
-            input_feature_test_df=test_df.drop(TARGET_COLUMN,axis=1)
+            input_feature_train_df=train_df.drop(TARGET_COLUMN,axis=1) #X_train
+            input_feature_test_df=test_df.drop(TARGET_COLUMN,axis=1)    #Y_train
 
             #selecting target feature for train and test dataframe
-            target_feature_train_df = train_df[TARGET_COLUMN]
-            target_feature_test_df = test_df[TARGET_COLUMN]
-
+            target_feature_train_df = train_df[TARGET_COLUMN] #X_test
+            target_feature_test_df = test_df[TARGET_COLUMN]     #Y_test
+            
             label_encoder = LabelEncoder()
             label_encoder.fit(target_feature_train_df)
 
             #transformation on target columns
             target_feature_train_arr = label_encoder.transform(target_feature_train_df)
             target_feature_test_arr = label_encoder.transform(target_feature_test_df)
-
-            transformation_pipleine = DataTransformation.get_data_transformer_object()
-            transformation_pipleine.fit(input_feature_train_df)
+            
+            transformation_pipeline = DataTransformation.get_data_transformer_object()            
+            transformation_pipeline.fit(input_feature_train_df)
 
             #transforming input features
-            input_feature_train_arr = transformation_pipleine.transform(input_feature_train_df)
-            input_feature_test_arr = transformation_pipleine.transform(input_feature_test_df)
+            input_feature_train_arr = transformation_pipeline.transform(input_feature_train_df)
+            input_feature_test_arr = transformation_pipeline.transform(input_feature_test_df)
+                      
+            print("input_feature_train_arr:",input_feature_train_arr.dtype)
+            print("input_feature_test_arr:",input_feature_test_arr.dtype)
+            print("target_feature_train_arr:", type(target_feature_train_arr))
+            print("target_feature_test_arr:", type(target_feature_test_arr))
             
 
-            smt = SMOTETomek(random_state=42)
+            smt = SMOTETomek(sampling_strategy="minority",random_state=42)
+            
             logging.info(f"Before resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_arr.shape}")
-            input_feature_train_arr, target_feature_train_arr = smt.fit_resample(input_feature_train_arr, target_feature_train_arr)
+            input_feature_train_arr, target_feature_train_arr = smt.fit_resample(input_feature_train_arr, str(target_feature_train_arr))
             logging.info(f"After resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_arr.shape}")
+            
             
             logging.info(f"Before resampling in testing set Input: {input_feature_test_arr.shape} Target:{target_feature_test_arr.shape}")
             input_feature_test_arr, target_feature_test_arr = smt.fit_resample(input_feature_test_arr, target_feature_test_arr)
@@ -93,7 +102,7 @@ class DataTransformation:
 
 
             utils.save_object(file_path=self.data_transformation_config.transform_object_path,
-             obj=transformation_pipleine)
+             obj=transformation_pipeline)
 
             utils.save_object(file_path=self.data_transformation_config.target_encoder_path,
             obj=label_encoder)
