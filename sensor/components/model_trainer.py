@@ -28,6 +28,12 @@ class ModelTrainer:
             return xgb_clf
         except Exception as e:
             raise SensorException(e,sys)
+    def fine_tune(self):
+        try:
+            # write code for grid search CV
+            pass
+        except Exception as e:
+            raise SensorException(e,sys)
         
     def initiate_model_trainer(self,)->artifact_entity.ModelTrainerArtifact:
         try:
