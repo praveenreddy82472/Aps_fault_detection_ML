@@ -8,7 +8,7 @@ import pandas as pd
 from sensor import utils
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
-from imblearn.combine import SMOTETomek
+#from imblearn.combine import SMOTETomek
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import RobustScaler
 from sensor.config import TARGET_COLUMN
