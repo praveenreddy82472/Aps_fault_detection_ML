@@ -15,10 +15,10 @@ from sensor.config import TARGET_COLUMN
 class DataValidation:
     
     
-    def __init__(self,data_validation_config:config_entity.DataValidationConfig,data_ingestion_artifact:artifact_entity.DataIngestionArtifact):
+    def __init__(self,data_validation_congif:config_entity.DataValidationConfig,data_ingestion_artifact:artifact_entity.DataIngestionArtifact):
         try:
             logging.info(f"{'>>'*20} Data validation {'<<'*20}")
-            self.data_validation_config  = data_validation_config
+            self.data_validation_config  = data_validation_congif
             self.data_ingestion_artifact=data_ingestion_artifact
             self.validation_error = dict()
             
@@ -85,7 +85,7 @@ class DataValidation:
             for base_column in base_columns:
                 base_data,current_data = base_df[base_column],current_df[base_column]
                 #Null hypothesis is that column data drawn from same distribution
-                logging.info(f"Hypothesis {base_column}:{base_data.dtype},{current_data.dtype}")
+                logging.info(f"Hypothesis {base_column}: {base_data.dtype}, {current_data.dtype} ")
                 same_distribution = ks_2samp(base_data,current_data)
                 
                 if same_distribution.pvalue>0.5:

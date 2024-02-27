@@ -42,14 +42,13 @@ class ModelEvaluation:
             #finding location of transformer model and target encoder
             logging.info("finding location of transformer model and target encoder")
             transformer_path = self.model_resolver.get_latest_transformer_path()
-            model_path = self.model_resolver.get_latest_save_model_path()
-            target_encoder_path = self.model_resolver.get_latest_save_target_encoder_path()
+            model_path = self.model_resolver.get_latest_model_path()
+            target_encoder_path = self.model_resolver.get_latest_target_encoder_path()
             
             #previous trained objects
-            print("Current Working Directory:", os.getcwd())
             logging.info("previous trained objects of transformer,model and target encoder")
             transformer = load_object(file_path=transformer_path)
-            model = load_object(file_path = model_path)
+            model = load_object(file_path =model_path)
             traget_encoder = load_object(file_path=target_encoder_path)
             
             
@@ -64,7 +63,8 @@ class ModelEvaluation:
             y_true = traget_encoder.transform(target_df)
             # Accuracy using previous trained model
             logging.info("Accuracy using previous trained model")
-            input_arr = transformer.transform(test_df)
+            input_feature_name = list(transformer.feature_names_in_)
+            input_arr =transformer.transform(test_df[input_feature_name])
             y_pred = model.predict(input_arr)
             print(f"Prediction using Previous Model: {traget_encoder.inverse_transform(y_pred[:5])}")
             previous_model_score = f1_score(y_true=y_true,y_pred=y_pred)
@@ -72,7 +72,8 @@ class ModelEvaluation:
             
             #accuracy using current trained model
             logging.info("accuracy using current trained model")
-            input_arr = current_transformer.transform(test_df)
+            input_feature_name = list(current_transformer.feature_names_in_)
+            input_arr =current_transformer.transform(test_df[input_feature_name])
             y_pred = current_model.predict(input_arr)
             y_true = current_target_encoder.transform(target_df)
             print(f"Prediction using trained Model: {current_target_encoder.inverse_transform(y_pred[:5])}")
