@@ -10,7 +10,7 @@ import numpy as np
 
 PREDICTION_DIR = "prediction"
 
-def batch_prediction(input_file_path):
+def start_batch_prediction(input_file_path):
     try:
         os.makedirs(PREDICTION_DIR,exist_ok=True)
         logging.info(f"Creating model resolver object")
@@ -19,6 +19,7 @@ def batch_prediction(input_file_path):
         df = pd.read_csv(input_file_path)
         df.replace({"na":np.NAN},inplace=True)
         
+        #validation
         
         
         logging.info("Loading transformer to transform dataset")
@@ -39,7 +40,7 @@ def batch_prediction(input_file_path):
         df["prediction"] = prediction
         df["cat_pred"] = cat_prediction
                 
-        prediction_file_name = os.path.base(input_file_path).replcae(".csv",f"{datetime.now().strftime('%m%d%Y__%H%M%S')}.csv")
+        prediction_file_name = os.path.basename(input_file_path).replace(".csv",f"{datetime.now().strftime('%m%d%Y__%H%M%S')}.csv")
         prediction_file_path = os.path.join(PREDICTION_DIR,prediction_file_name)
         df.to_csv(prediction_file_path,index=False,header=True)
         return prediction_file_path
