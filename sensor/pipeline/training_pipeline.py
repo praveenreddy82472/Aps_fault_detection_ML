@@ -1,9 +1,7 @@
-import os,sys
-from sensor.utils import *
 from sensor.logger import logging
 from sensor.entity import config_entity
 from sensor.entity.config_entity import *
-from sensor.components import data_ingestion
+#from sensor.components import data_ingestion
 from sensor.components.data_ingestion import DataIngestion
 from sensor.components.data_validation import DataValidation
 from sensor.components.data_transformation import DataTransformation

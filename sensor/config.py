@@ -1,10 +1,12 @@
 import pymongo
 import pandas as pd
 import json 
+import ssl
 from dataclasses import dataclass
 
 #provide the mongodb localhost url to conncet python to mongodb
 import os
+
 
 @dataclass
 class EnvironmentVariable:
@@ -14,7 +16,7 @@ class EnvironmentVariable:
 
 env_var  = EnvironmentVariable()
 
-mongo_client = pymongo.MongoClient(env_var.mongo_db_url)
+mongo_client = pymongo.MongoClient("mongodb+srv://tumatipraveenreddy23:Praveen987@cluster0.wjup0bh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 TARGET_COLUMN = "class"
 
 
