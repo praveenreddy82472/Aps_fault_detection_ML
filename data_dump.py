@@ -1,8 +1,10 @@
 import pandas as pd
 import json 
-import pymongo
-
-client = pymongo.MongoClient("mongodb://localhost:27017")
+from pymongo import MongoClient, server_api
+import certifi
+ca = certifi.where()
+client = MongoClient("mongodb+srv://praveen:reddy@cluster0.83h2uag.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+                             server_api=server_api.ServerApi('1'), tlsCAFile=ca)
 DATA_FILE_PATH = "D:/Ineuron/ML Projects/AirPressureSystem/Airps_failure_training_set1.csv"
 DATABASE_NAME = "aps"
 COLLECTION_NAME = "sensor"

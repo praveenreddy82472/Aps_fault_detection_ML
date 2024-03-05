@@ -46,12 +46,14 @@ def start_training_pipeline():
         model_eval_config = config_entity.ModelEvaluationConfig(training_pipeline_config=training_pipeline_config)
         model_eval = ModelEvaluation(model_eval_config=model_eval_config,data_ingestion_artifact=data_ingestion_artifact,data_transformation_artifact=data_transformation_artifact,model_trainer_artifact=model_trainer_artifact)
         model_eval_artifact = model_eval.initiate_model_evaluation()
+        print(model_eval_artifact)
         
         #ModelPusher
         
         model_pusher_config = config_entity.ModelPusherConfig(training_pipeline_config=training_pipeline_config)
         model_pusher = ModelPusher(model_pusher_config=model_pusher_config,data_transformation_artifact=data_transformation_artifact,model_trainer_artifact=model_trainer_artifact)
         model_pusher_artifact = model_pusher.initiate_model_pusher()
+        print(model_pusher_artifact)
         
     except Exception as e:
         print(e)
